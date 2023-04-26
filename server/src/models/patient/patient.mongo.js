@@ -28,7 +28,7 @@ const patientSchema = new mongoose.Schema({
     trim: true,
   },
   contact_number: {
-    type: Number,
+    type: String,
     required: true,
   },
   email: {

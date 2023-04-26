@@ -1,11 +1,11 @@
 const Patient = require("./patient.mongo");
 
-async function getAllPatients(skip, limit,sort) {
+async function getAllPatients(skip, limit, sort) {
   return await Patient.find({}, { __v: 0 }).skip(skip).limit(limit).sort(sort);
 }
 
-async function getTotalPatient(){
-    return await Patient.find({}).count();
+async function getTotalPatient() {
+  return await Patient.find({}).count();
 }
 
 async function savePatient(patient) {
@@ -34,11 +34,42 @@ async function deletePatient(patientId) {
     _id: patientId,
   });
 }
+
+async function searchPatient(searchKey) {
+  return await Patient.find(
+    {
+      $or: [
+        { firstName: { $regex: searchKey, $options: "i" } },
+        { middleName: { $regex: searchKey, $options: "i" } },
+        { lastName: { $regex: searchKey, $options: "i" } },
+        { address: { $regex: searchKey, $options: "i" } },
+        { contact_number: { $regex: searchKey, $options: "i" } },
+        { email: { $regex: searchKey } },
+      ],
+    },
+    {
+      __v: 0,
+    }
+  );
+}
+
+async function filterPatientByAge(minAge, maxAge) {
+  return await Patient.find(
+    {
+      $and: [{ age: { $gte: minAge } }, { age: { $lt: maxAge } }],
+    },
+    {
+      __v: 0,
+    }
+  );
+}
 module.exports = {
   getAllPatients,
   savePatient,
   isExistingPatient,
   updatePatient,
   deletePatient,
-  getTotalPatient
+  getTotalPatient,
+  searchPatient,
+  filterPatientByAge
 };
