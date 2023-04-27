@@ -9,8 +9,10 @@ const {
   httpSearchPatient,
   httpFilterPatientByAge,
   temp,
+  uplaodCSV,
 } = require("./patient.controller");
 const { check } = require("express-validator");
+const { uploads } = require("../../services/multer");
 
 const patientRouter = express.Router();
 
@@ -32,6 +34,7 @@ const patientValidations = [
   }),
   check("email", "Email should be valid").isEmail(),
 ];
+patientRouter.post('/upload',verifyToken,uploads.single('csvFile'),uplaodCSV);
 patientRouter.get("/filter",verifyToken,httpFilterPatientByAge);
 patientRouter.get("/all", verifyToken, httpGetAllPatients);
 patientRouter.post("/add", verifyToken, patientValidations, httpSavePatient);

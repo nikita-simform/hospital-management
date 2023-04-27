@@ -7,9 +7,11 @@ const {
   getTotalPatient,
   searchPatient,
   filterPatientByAge,
+  uploadFile,
 } = require("../../models/patient/patient.model");
 const { validationResult } = require("express-validator");
 const { getPagination, getSorting } = require("../../services/query");
+const csv = require("csvtojson");
 
 async function httpGetAllPatients(req, res) {
   const { skip, limit } = getPagination(req.query);
@@ -132,6 +134,22 @@ async function httpFilterPatientByAge(req, res) {
   });
 }
 
+function uplaodCSV(req, res) {
+  csv()
+    .fromFile(req.file.path)
+    .then(async (response) => {
+      await uploadFile(response);
+      return res.status(200).json({
+        message: "csv file uplaoded successfullly",
+      });
+    })
+    .catch((error) => {
+      console.log("error::", error);
+      return res.status(400).json({
+        error: "error in uploading csv file",
+      });
+    });
+}
 
 module.exports = {
   httpGetAllPatients,
@@ -141,4 +159,5 @@ module.exports = {
   httpFindPatientById,
   httpSearchPatient,
   httpFilterPatientByAge,
+  uplaodCSV,
 };

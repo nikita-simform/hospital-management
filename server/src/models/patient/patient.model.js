@@ -63,6 +63,11 @@ async function filterPatientByAge(minAge, maxAge) {
     }
   );
 }
+
+async function uploadFile(csvData){
+
+  return await Patient.insertMany(csvData);
+}
 module.exports = {
   getAllPatients,
   savePatient,
@@ -71,5 +76,6 @@ module.exports = {
   deletePatient,
   getTotalPatient,
   searchPatient,
-  filterPatientByAge
+  filterPatientByAge,
+  uploadFile
 };
