@@ -1,11 +1,13 @@
 import { Button, Form, Input } from "antd";
 import { apiService } from "../../sevices/apiService";
 import { useSelector, useDispatch } from "react-redux";
-import { setUser } from "./LoginSlice";
+import { setToken, setUser } from "./LoginSlice";
+import { useNavigate } from "react-router-dom";
 
 function Login(props) {
-  const user = useSelector((state) => state.login.user);
   const dispatch = useDispatch();
+  let navigate = useNavigate();
+
   const onFinish = (values) => {
     apiService
       .login({
@@ -14,10 +16,11 @@ function Login(props) {
       })
       .then((res) => {
         dispatch(setUser(res.data.user));
+        dispatch(setToken(res.data.token));
+        navigate("/patient-list");
       });
   };
-  const onFinishFailed = (errorInfo) => {
-  };
+  const onFinishFailed = (errorInfo) => {};
   return (
     <Form
       name="basic"

@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import PrivateRoutes from "./utils/PrivateRoutes";
-import PatientList from "./components/PatientList";
+import PatientList from "./components/Patient/patientList";
 
 function App() {
   return (
