@@ -26,7 +26,7 @@ function signup(requestBody) {
 }
 
 function logout() {
-  setLocalStorage("token",null);
+  setLocalStorage("token", null);
   return request(API_URL + "/logout", "GET");
 }
 
@@ -37,7 +37,8 @@ function savePatient(requestBody) {
     {
       "Content-Type": "application/json",
     },
-    requestBody
+    requestBody,
+    true
   );
 }
 
@@ -48,35 +49,38 @@ function updatePatient(requestBody) {
     {
       "Content-Type": "application/json",
     },
-    requestBody
+    requestBody,
+    true
   );
 }
 
 function getPatientById(patientId) {
-  return request(API_URL + "/patients/" + patientId, "GET");
+  return request(API_URL + "/patients/" + patientId, "GET", {}, {}, true);
 }
 function deletePatient(patientId) {
-  return request(API_URL + "/patients/" + patientId, "DELETE");
+  return request(API_URL + "/patients/" + patientId, "DELETE", {}, {}, true);
 }
 function getAllPatients(page, limit, sort, direction) {
   let url = API_URL + "/patients/all";
 
-  if (page & limit) {
-    url += url + "?page=" + page + "&limit=" + limit;
+  if (page && limit) {
+    url += "?page=" + page + "&limit=" + limit;
   }
-  if (sort & direction) {
+  if (sort && direction) {
     url +=
-      url +
-      `${!page || !limit ? "?" : "&"}sort=` +
-      sort +
-      "&direction=" +
-      direction;
+      `${!page || !limit ? "?" : "&"}sort=` + sort + "&direction=" + direction;
   }
   return request(url, "GET", {}, {}, true);
 }
 
 function searchPatient(searchKey) {
-  return request(API_URL + "/search" + searchKey, "GET");
+  return request(
+    API_URL + "/patients/search/" + searchKey,
+    "GET",
+    {},
+    {},
+    true
+  );
 }
 
 function filterPatient(minAge, maxAge) {
@@ -84,8 +88,11 @@ function filterPatient(minAge, maxAge) {
     getAllPatients();
   }
   return request(
-    API_URL + "/filter?minAge=" + minAge + "&maxAge=" + maxAge,
-    "GET"
+    API_URL + "/patients/filter?minAge=" + minAge + "&maxAge=" + maxAge,
+    "GET",
+    {},
+    {},
+    true
   );
 }
 
@@ -101,4 +108,5 @@ export const apiService = {
   getAllPatients,
   searchPatient,
   filterPatient,
+  uploadCSV
 };

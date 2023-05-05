@@ -13,7 +13,7 @@ function Home(props) {
         <Image src={hospitalImage} height={700} width={1700}/>
         <p>Welcome to hospital management portal</p>
       </div>
-      <Footer/>
+      {/* <Footer/> */}
     </>
   );
 }

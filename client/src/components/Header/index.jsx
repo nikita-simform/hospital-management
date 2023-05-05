@@ -23,7 +23,7 @@ function Header({ isUserLoggedIn = false }) {
         ) : (
           <nav>
             <a href="/login">Login</a>
-            <a href="#">Sign up</a>
+            <a href="/sign-up">Sign up</a>
           </nav>
         )}
       </div>
