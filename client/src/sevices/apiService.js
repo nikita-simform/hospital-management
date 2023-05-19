@@ -1,7 +1,7 @@
 import { request } from "../utils/request";
 import { setLocalStorage } from "../utils/storage";
 
-const API_URL = "http://localhost:8000/v1";
+export const API_URL = "http://localhost:8000/v1";
 
 function login(requestBody) {
   return request(
@@ -108,5 +108,5 @@ export const apiService = {
   getAllPatients,
   searchPatient,
   filterPatient,
-  uploadCSV
+  uploadCSV,
 };

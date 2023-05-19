@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { Table, Input, Modal, Button, message, Upload, Space } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { apiService } from "../../sevices/apiService";
+import { apiService, API_URL } from "../../sevices/apiService";
 import {
   DEFALUT_PAGE,
   DEFAULT_PAGE_SIZE,
@@ -18,6 +18,7 @@ import {
 } from "./PatientSlice";
 import { getLocalStorage } from "../../utils/storage";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const { Search } = Input;
 function PatientList(props) {
@@ -91,11 +92,12 @@ function PatientList(props) {
 
   const deletePatient = () => {
     apiService.deletePatient(isDeletePopupOpen).then((response) => {
-      let newPatientList=[...patientList]
+      toast.success("Patient details deleted successfully");
+      let newPatientList = [...patientList];
       let index = newPatientList.indexOf(
         newPatientList.find((patient) => patient._id == isDeletePopupOpen)
       );
-       newPatientList.splice(index, 1);
+      newPatientList.splice(index, 1);
       dispatch(setPatientList(newPatientList));
       dispatch(setIsDeletePopupOpen(null));
     });
@@ -105,12 +107,10 @@ function PatientList(props) {
   };
   function onChange(info) {
     if (info.file.status !== "uploading") {
-      console.log(info.file, info.fileList);
     }
     if (info.file.status === "done") {
       message.success(`${info.file.name} file uploaded successfully`);
       httpGetAllPatients(DEFALUT_PAGE, DEFAULT_PAGE_SIZE);
-
     } else if (info.file.status === "error") {
       message.error(`${info.file.name} file upload failed.`);
     }
@@ -119,8 +119,8 @@ function PatientList(props) {
 
   return (
     <div>
-      <h1>Patient List</h1>
-      <Space>
+      <h1 className="heading">Patient List</h1>
+      <Space className="button-container">
         <Button
           onClick={() => {
             navigate("/patient/add");
@@ -136,7 +136,7 @@ function PatientList(props) {
         />
         <Upload
           name="csvFile"
-          action="http://localhost:8000/v1/patients/upload"
+          action={`${API_URL}/patients/upload`}
           headers={{ authorization: "Bearer " + token }}
           onChange={onChange}
         >

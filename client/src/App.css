@@ -3,30 +3,59 @@
   /* margin: 0 auto; */
   /* padding: 2rem; */
   /* text-align: center; */
-}
-.fixed-header, .fixed-footer{
   width: 100%;
-  position: fixed;        
+}
+.heading {
+  display: flex;
+  justify-content: center;
+}
+.card-container {
+  -webkit-box-shadow: 2px 2px 35px 22px rgba(224, 224, 224, 1);
+  -moz-box-shadow: 2px 2px 35px 22px rgba(224, 224, 224, 1);
+  box-shadow: 2px 2px 35px 22px rgba(224, 224, 224, 1);
+  margin: 0 auto;
+}
+.login {
+  width: 500px;
+  height: 400px;
+}
+
+.sign-up {
+  width: 500px;
+}
+.add-edit-patient {
+  width: 650px;
+}
+.view-details {
+  width: 700px;
+}
+.fixed-header,
+.fixed-footer {
+  width: 100%;
+  position: fixed;
   background: #333;
   padding: 10px 0;
   color: #fff;
 }
-.fixed-header{
+.fixed-header {
   top: 0;
 }
-.fixed-footer{
+.fixed-footer {
   bottom: 0;
 }
-.container{
+.container {
   width: 100%;
   margin: 0 auto; /* Center the DIV horizontally */
   display: flex;
   justify-content: flex-end;
 }
-.container p{
+.container p {
   margin: 50px;
+  position: absolute;
+  left: 20%;
+  font-size: xxx-large;
 }
-nav a{
+nav a {
   color: #fff;
   text-decoration: none;
   padding: 7px 25px;
@@ -38,6 +67,11 @@ nav a{
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
+}
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin: 20px;
 }
 /* .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);

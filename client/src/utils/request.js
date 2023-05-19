@@ -2,6 +2,7 @@
 // Documentation for:: https://www.npmjs.com/package/axios
 import axios from "axios";
 import { getLocalStorage } from "./storage";
+import { toast } from "react-toastify";
 /**
  * [request description]
  * @param  {[string]} url       URL of the API which needs to be consumed by client
@@ -33,6 +34,13 @@ export const request = (url, method, headers, payload, isTokenRequired) => {
           resolve(response);
         })
         .catch((error) => {
+          if (error.response.status == 401) {
+            window.location = "/login";
+          } else {
+            toast.error(
+              error.response.data.error || error.response.data.message
+            );
+          }
           reject(error);
         });
     }

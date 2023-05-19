@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Input, InputNumber } from "antd";
+import { Button, Form, Input, InputNumber, Card } from "antd";
 import { apiService } from "../../sevices/apiService";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 export default function AddEditPatientDetails(props) {
   const [patientDetail, setPatientDetail] = useState({});
@@ -42,10 +43,12 @@ export default function AddEditPatientDetails(props) {
     if (params.id) {
       requestBody.id = params.id;
       apiService.updatePatient(requestBody).then((res) => {
+        toast.success("Patient details updated successfully");
         navigate("/patient-list");
       });
     } else {
       apiService.savePatient(requestBody).then((res) => {
+        toast.success("Patient details added successfully");
         navigate("/patient-list");
       });
     }
@@ -55,8 +58,8 @@ export default function AddEditPatientDetails(props) {
   };
   const { TextArea } = Input;
   return (
-    <div>
-      <h1>{params.id ? "Edit Patient" : "Add Patient"}</h1>
+    <Card className="card-container add-edit-patient">
+      <h1 className="heading">{params.id ? "Edit Patient" : "Add Patient"}</h1>
       <Form
         name="basic"
         labelCol={{
@@ -66,7 +69,7 @@ export default function AddEditPatientDetails(props) {
           span: 20,
         }}
         style={{
-          maxWidth: 1000,
+          width: 700,
         }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -74,7 +77,6 @@ export default function AddEditPatientDetails(props) {
         form={form}
       >
         <Form.Item
-          label="FirstName"
           name="firstname"
           rules={[
             {
@@ -83,10 +85,9 @@ export default function AddEditPatientDetails(props) {
             },
           ]}
         >
-          <Input />
+          <Input placeholder="Enter First Name" />
         </Form.Item>
         <Form.Item
-          label="MiddleName"
           name="middlename"
           rules={[
             {
@@ -95,10 +96,9 @@ export default function AddEditPatientDetails(props) {
             },
           ]}
         >
-          <Input />
+          <Input placeholder="Enter Middle Name" />
         </Form.Item>
         <Form.Item
-          label="LastName"
           name="lastname"
           rules={[
             {
@@ -107,10 +107,9 @@ export default function AddEditPatientDetails(props) {
             },
           ]}
         >
-          <Input />
+          <Input placeholder="Enter Last Name" />
         </Form.Item>
         <Form.Item
-          label="Age"
           name="age"
           rules={[
             {
@@ -119,13 +118,12 @@ export default function AddEditPatientDetails(props) {
             },
           ]}
         >
-          <InputNumber />
+          <InputNumber placeholder="Enter Age" />
         </Form.Item>
-        <Form.Item label="Addres" name="address">
-          <TextArea rows={4} />
+        <Form.Item name="address">
+          <TextArea rows={4} placeholder="Enter Address" />
         </Form.Item>
         <Form.Item
-          label="Contact Number"
           name="contact_number"
           rules={[
             {
@@ -134,10 +132,9 @@ export default function AddEditPatientDetails(props) {
             },
           ]}
         >
-          <Input />
+          <Input placeholder="Enter Contact Number" />
         </Form.Item>
         <Form.Item
-          label="Email"
           name="email"
           rules={[
             {
@@ -146,7 +143,7 @@ export default function AddEditPatientDetails(props) {
             },
           ]}
         >
-          <Input />
+          <Input placeholder="Enter Email" />
         </Form.Item>
         <Form.Item
           wrapperCol={{
@@ -159,6 +156,6 @@ export default function AddEditPatientDetails(props) {
           </Button>
         </Form.Item>
       </Form>
-    </div>
+    </Card>
   );
 }

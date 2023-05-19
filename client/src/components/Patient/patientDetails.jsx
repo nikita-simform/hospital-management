@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { apiService } from "../../sevices/apiService";
 import { useParams } from "react-router-dom";
-
+import { Card } from "antd";
 export default function patientDetails(props) {
   const [patientDetail, setPatientDetail] = useState({});
   const params = useParams();
@@ -14,9 +14,10 @@ export default function patientDetails(props) {
     }
   }, [params.id]);
   return (
-    <div>
+    <Card className="card-container view-details">
+      <h1 className="heading">Patient Details</h1>
       <p>
-        Name: 
+        Name:
         {patientDetail.firstName +
           " " +
           patientDetail.middleName +
@@ -27,6 +28,6 @@ export default function patientDetails(props) {
       <p>Address: {patientDetail.address}</p>
       <p>Contact number: {patientDetail.contact_number}</p>
       <p>Email: {patientDetail.email}</p>
-    </div>
+    </Card>
   );
 }
