@@ -1,0 +1,28 @@
+{
+  "name": "hospital-management",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install-server":"npm install --prefix server",
+    "install-client": "npm install --prefix client",
+    "install": "npm run install-server && npm run install-client",
+    "server":"npm start npm --prefix server" ,
+    "client":"npm run dev --prefix client",
+    "build-client":"npm run build --prefix client",
+    "watch":"npm run server & npm run client",
+    "deploy":"npm run build-client && npm run server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikita-simform/hospital-management.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nikita-simform/hospital-management/issues"
+  },
+  "homepage": "https://github.com/nikita-simform/hospital-management#readme"
+}
