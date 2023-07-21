@@ -1,5 +1,5 @@
 const express=require('express');
-const { ensureToken } = require('./login/login.controller');
+const { ensureToken } = require('../utils/accessToken');
 const loginRouter=require('./login/login.router');
 const patientRouter = require('./patient/patient.router');
 

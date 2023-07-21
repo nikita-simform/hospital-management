@@ -1,102 +1,80 @@
 const { isExistingUser, doSignup } = require("../../models/user/user.model");
 const { validationResult } = require("express-validator");
-const jwt = require("jsonwebtoken");
-const expressJwt = require("express-jwt");
+const { httpResponse, httpErrorResponse } = require("../../utils/httpResponse");
+const { createToken } = require("../../utils/accessToken");
 
 async function signup(req, res) {
-  const errors = validationResult(req);
+  try {
+    const errors = validationResult(req);
 
-  if (!errors.isEmpty()) {
-    return res.status(400).json({
-      error: errors.array()[0].msg,
-    });
-  }
-  const user = req.body;
+    if (!errors.isEmpty()) {
+      return httpResponse(res, 400, { error: errors.array()[0].msg });
+    }
+    const user = req.body;
 
-  const isUserExists = await isExistingUser(user.email);
-  if (isUserExists) {
-    return res.status(400).json({
-      error: "User already exists",
-    });
+    const isUserExists = await isExistingUser(user.email);
+    if (isUserExists) {
+      return httpResponse(res, 400, { error: "User already exists" });
+    }
+
+    const newUser = await doSignup(user);
+    return httpResponse(res, 201, 'User created successfully', { result: newUser });
   }
-  const newUser = await doSignup(user);
-  return res.status(201).json({
-    message: "User created succesfully",
-    newUser,
-  });
+  catch (error) {
+    return httpErrorResponse(res, error);
+  }
 }
 
-async function signin(req, res) {
-  const errors = validationResult(req);
+async function signIn(req, res) {
+  try {
+    const errors = validationResult(req);
 
-  if (!errors.isEmpty()) {
-    return res.status(400).json({
-      error: errors.array()[0].msg,
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        error: errors.array()[0].msg,
+      });
+    }
+
+    const { email, password } = req.body;
+
+    const existingUser = await isExistingUser(email);
+
+    if (!existingUser) {
+      return httpResponse(res, 400, { error: "Email was not found" });
+    }
+
+    if (!existingUser.authenticate(password)) {
+      return httpResponse(res, 400, { error: "Incorrect password" });
+    }
+
+    const token = createToken({ _id: existingUser._id });
+    res.cookie("token", token, { expire: new Date() + 1 });
+
+    return httpResponse(res, 200, 'Login Successful', {
+      result: {
+        token,
+        user: {
+          id: existingUser._id,
+          name: existingUser.firstName + " " + existingUser.lastName,
+          email: existingUser.email,
+        }
+      }
     });
   }
-
-  const { email, password } = req.body;
-  const existingUser = await isExistingUser(email);
-  if (!existingUser) {
-    return res.status(400).json({
-      error: "Email was not found",
-    });
+  catch (error) {
+    return httpErrorResponse(res, error);
   }
-
-  if (!existingUser.authenticate(password)) {
-    return res.status(400).json({
-      error: "incorrect password",
-    });
-  }
-  const token = jwt.sign({ _id: existingUser._id }, process.env.SECRET,{expiresIn: '1h'});
-
-  res.cookie("token", token, { expire: new Date() + 1 });
-
-  res.status(200).json({
-    token,
-    user: {
-      id: existingUser._id,
-      name: existingUser.firstName + " " + existingUser.lastName,
-      email: existingUser.email,
-    },
-  });
 }
 
 function logout(req, res) {
   res.clearCookie("token");
-  res.json({
-    message: "User logged out succesfully",
-  });
+  return httpResponse(res, 200, 'User logged out successfully');
 }
 
-function ensureToken(req, res, next) {
-  const bearerHeader = req.headers["authorization"];
-  if (bearerHeader != undefined) {
-    const bearer = bearerHeader.split(" ");
-    const bearerToken = bearer[1];
-    req.token = bearerToken;
-    next();
-  } else {
-    res.status(401).json({
-      message: "Unauthorised user",
-    });
-  }
-}
 
-function verifyToken(req, res, next) {
-  try {
-    const decoded = jwt.verify(req.token, process.env.SECRET);
-    next();
-  } catch (error) {
-    return res.status(401).json({
-      messgae: "Invalid Token",
-    });
-  }
-}
+
 module.exports = {
   signup,
-  signin,
-  logout,
-  ensureToken,
-  verifyToken,
+  signIn,
+  logout
 };
