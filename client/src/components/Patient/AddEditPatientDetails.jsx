@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Input, InputNumber, Card } from "antd";
-import { apiService } from "../../sevices/apiService";
+import { apiService } from "../../services/apiService";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
-export default function AddEditPatientDetails(props) {
+export default function AddEditPatientDetails() {
   const [patientDetail, setPatientDetail] = useState({});
   const params = useParams();
   const [form] = Form.useForm();
@@ -25,7 +25,7 @@ export default function AddEditPatientDetails(props) {
   useEffect(() => {
     if (params.id) {
       apiService.getPatientById(params.id).then((response) => {
-        setPatientDetail(response.data);
+        setPatientDetail(response.data.data?.result);
       });
     }
   }, [params.id]);
@@ -42,12 +42,12 @@ export default function AddEditPatientDetails(props) {
     };
     if (params.id) {
       requestBody.id = params.id;
-      apiService.updatePatient(requestBody).then((res) => {
+      apiService.updatePatient(requestBody).then(() => {
         toast.success("Patient details updated successfully");
         navigate("/patient-list");
       });
     } else {
-      apiService.savePatient(requestBody).then((res) => {
+      apiService.savePatient(requestBody).then(() => {
         toast.success("Patient details added successfully");
         navigate("/patient-list");
       });
@@ -130,6 +130,14 @@ export default function AddEditPatientDetails(props) {
               required: true,
               message: "Please enter contact number of patient",
             },
+            {
+              type: 'number',
+              message: 'Please enter valid contact number'
+            },
+            {
+              min: 10, max: 10,
+              message: 'Please enter 10 digit contact number'
+            }
           ]}
         >
           <Input placeholder="Enter Contact Number" />
@@ -140,6 +148,10 @@ export default function AddEditPatientDetails(props) {
             {
               required: true,
               message: "Please enter email of patient",
+            },
+            {
+              type: 'email',
+              message: 'Please enter valid email',
             },
           ]}
         >

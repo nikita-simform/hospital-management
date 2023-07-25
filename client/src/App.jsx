@@ -8,7 +8,7 @@ import PatientList from "./components/Patient/patientList";
 import PatientDetails from "./components/Patient/patientDetails";
 import AddEditPatientDetails from "./components/Patient/AddEditPatientDetails";
 import SignUp from "./components/SignUp";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {

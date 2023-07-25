@@ -89,7 +89,7 @@ export function getColumns(handleDelete) {
 }
 
 export const DEFAULT_PAGE_SIZE = 10;
-export const DEFALUT_PAGE = 1;
+export const DEFAULT_PAGE = 1;
 
 export const direction = {
   ascend: "ASC",

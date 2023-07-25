@@ -38,7 +38,7 @@ export const request = (url, method, headers, payload, isTokenRequired) => {
             window.location = "/login";
           } else {
             toast.error(
-              error.response.data.error || error.response.data.message
+              error.response.data.error || error.response.data.message.error || error.response.data.message
             );
           }
           reject(error);

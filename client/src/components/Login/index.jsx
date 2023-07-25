@@ -1,9 +1,10 @@
 import { Button, Form, Input, Card } from "antd";
-import { apiService } from "../../sevices/apiService";
-import { useSelector, useDispatch } from "react-redux";
+import { apiService } from "../../services/apiService";
+import { useDispatch } from "react-redux";
 import { setToken, setUser } from "./LoginSlice";
 import { useNavigate } from "react-router-dom";
-function Login(props) {
+
+function Login() {
   const dispatch = useDispatch();
   let navigate = useNavigate();
 
@@ -14,12 +15,14 @@ function Login(props) {
         password: values.password,
       })
       .then((res) => {
-        dispatch(setUser(res.data.user));
-        dispatch(setToken(res.data.token));
+        dispatch(setUser(res.data.data?.user));
+        dispatch(setToken(res.data.data?.token));
         navigate("/patient-list");
       });
   };
-  const onFinishFailed = (errorInfo) => {};
+  const onFinishFailed = (errorInfo) => {
+    console.log("errorInfo:", errorInfo)
+  };
   return (
     <Card className="card-container login">
       <h1 className="heading">Login</h1>
@@ -36,14 +39,23 @@ function Login(props) {
         <div style={{ display: "block", width: "100%" }}>
           <Form.Item
             name="username"
-            rules={[{ required: true, message: "Please input your username!" }]}
+            rules={[
+              { required: true, message: "Username is required" },
+              {
+                type: 'email',
+                message: 'Please enter valid email',
+              },
+            ]}
           >
             <Input style={{ width: "100%" }} placeholder="Enter username" />
           </Form.Item>
 
           <Form.Item
             name="password"
-            rules={[{ required: true, message: "Please input your password!" }]}
+            rules={[
+              { required: true, message: "Password is required" },
+              { min: 6, message: 'Username must be minimum 6 characters.' }
+            ]}
           >
             <Input.Password
               style={{ width: "100%" }}

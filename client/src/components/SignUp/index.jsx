@@ -1,7 +1,7 @@
-import React from "react";
 import { Button, Form, Input, Card } from "antd";
-import { apiService } from "../../sevices/apiService";
+import { apiService } from "../../services/apiService";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function SignUp() {
   let navigate = useNavigate();
@@ -17,11 +17,16 @@ export default function SignUp() {
         email: values.email,
         password: values.password,
       })
-      .then((res) => {
+      .then((response) => {
+        toast.success(response.data.message);
         navigate("/login");
       });
   };
-  const onFinishFailed = (errorInfo) => {};
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("errorInfo:",errorInfo)
+  };
+
   return (
     <Card className="card-container sign-up">
       <h1 className="heading">Sign Up</h1>
@@ -58,7 +63,13 @@ export default function SignUp() {
 
         <Form.Item
           name="email"
-          rules={[{ required: true, message: "Please enter your email" }]}
+          rules={[
+            { required: true, message: "Please enter your email" },
+            {
+              type: 'email',
+              message: 'Please enter valid email',
+            },
+          ]}
         >
           <Input placeholder="Enter Email" />
         </Form.Item>

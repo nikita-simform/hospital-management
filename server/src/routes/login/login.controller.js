@@ -18,7 +18,7 @@ async function signup(req, res) {
     }
 
     const newUser = await doSignup(user);
-    return httpResponse(res, 201, 'User created successfully', { result: newUser });
+    return httpResponse(res, 201, 'User created successfully', { newUser });
   }
   catch (error) {
     return httpErrorResponse(res, error);
@@ -50,15 +50,13 @@ async function signIn(req, res) {
     const token = createToken({ _id: existingUser._id });
     res.cookie("token", token, { expire: new Date() + 1 });
 
-    return httpResponse(res, 200, 'Login Successful', {
-      result: {
+    return httpResponse(res, 200, 'Login Successful', {   
         token,
         user: {
           id: existingUser._id,
           name: existingUser.firstName + " " + existingUser.lastName,
           email: existingUser.email,
-        }
-      }
+        } 
     });
   }
   catch (error) {

@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Table, Input, Modal, Button, message, Upload, Space } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { apiService, API_URL } from "../../sevices/apiService";
+import { apiService, API_URL } from "../../services/apiService";
 import {
-  DEFALUT_PAGE,
+  DEFAULT_PAGE,
   DEFAULT_PAGE_SIZE,
   direction,
   FilterMinMaxValues,
@@ -21,7 +20,9 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 const { Search } = Input;
-function PatientList(props) {
+
+function PatientList() {
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let patientList = useSelector((state) => state.patient.patientList);
@@ -31,12 +32,12 @@ function PatientList(props) {
   );
   const httpGetAllPatients = (page, limit, sort, direction) => {
     apiService.getAllPatients(page, limit, sort, direction).then((response) => {
-      dispatch(setPatientList(response.data.patients));
-      dispatch(setTotalPatients(response.data.total));
+      dispatch(setPatientList(response.data.data?.patients));
+      dispatch(setTotalPatients(response.data.data?.total));
     });
   };
   useEffect(() => {
-    httpGetAllPatients(DEFALUT_PAGE, DEFAULT_PAGE_SIZE);
+    httpGetAllPatients(DEFAULT_PAGE, DEFAULT_PAGE_SIZE);
   }, []);
 
   // const onPageChange = (pageNumber) => {
@@ -45,8 +46,8 @@ function PatientList(props) {
 
   const filterPatientsByAge = (minAge, maxAge) => {
     apiService.filterPatient(minAge, maxAge).then((response) => {
-      dispatch(setPatientList(response.data.patients));
-      dispatch(setTotalPatients(response.data.patients?.length || 0));
+      dispatch(setPatientList(response.data.data?.result));
+      dispatch(setTotalPatients(response.data.data?.result?.length || 0));
     });
   };
 
@@ -78,8 +79,8 @@ function PatientList(props) {
 
   const searchPatient = (searchKey) => {
     apiService.searchPatient(searchKey).then((response) => {
-      dispatch(setPatientList(response.data.patients));
-      dispatch(setTotalPatients(response.data.patients?.length || 0));
+      dispatch(setPatientList(response.data.data?.result));
+      dispatch(setTotalPatients(response.data.data?.result?.length || 0));
     });
   };
   const onSearch = (value) => {
@@ -91,7 +92,7 @@ function PatientList(props) {
   };
 
   const deletePatient = () => {
-    apiService.deletePatient(isDeletePopupOpen).then((response) => {
+    apiService.deletePatient(isDeletePopupOpen).then(() => {
       toast.success("Patient details deleted successfully");
       let newPatientList = [...patientList];
       let index = newPatientList.indexOf(
@@ -106,11 +107,10 @@ function PatientList(props) {
     dispatch(setIsDeletePopupOpen(null));
   };
   function onChange(info) {
-    if (info.file.status !== "uploading") {
-    }
+   
     if (info.file.status === "done") {
       message.success(`${info.file.name} file uploaded successfully`);
-      httpGetAllPatients(DEFALUT_PAGE, DEFAULT_PAGE_SIZE);
+      httpGetAllPatients(DEFAULT_PAGE, DEFAULT_PAGE_SIZE);
     } else if (info.file.status === "error") {
       message.error(`${info.file.name} file upload failed.`);
     }
