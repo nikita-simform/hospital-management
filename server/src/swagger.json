@@ -97,6 +97,7 @@
         },
         "/patients/add": {
             "post": {
+                "security": [ { "bearerAuth": [] } ],
                 "description": "create new patient",
                 "produces": [
                     "application/json"
@@ -126,6 +127,7 @@
         },
         "/patients/update": {
             "put": {
+                "security": [ { "bearerAuth": [] } ],
                 "description": "update existing patient details",
                 "produces": [
                     "application/json"
@@ -155,6 +157,7 @@
         },
         "/patients/{id}": {    
             "get": {
+                "security": [ { "bearerAuth": [] } ],
                 "description": "get existing patient",
                 "produces": [
                     "application/json"
@@ -181,6 +184,7 @@
                 }
             },
             "delete": {
+                "security": [ { "bearerAuth": [] } ],
                 "description": "delete existing patient",
                 "produces": [
                     "application/json"
@@ -248,11 +252,14 @@
                             "$ref": "#/definitions/getAllPatientResponse"
                         }
                     }
-                }
+                },
+            "security": [ { "bearerAuth": [] } ]
+
             }
         },
         "/patients/search/{searchKey}":{
             "get":{
+                "security": [ { "bearerAuth": [] } ],
                 "description": "get patient matches with search key",
                 "produces": [
                     "application/json"
@@ -281,6 +288,7 @@
         },
         "/patients/filter":{
             "get":{
+                "security": [ { "bearerAuth": [] } ],
                 "description": "Filter patient by age",
                 "produces": [
                     "application/json"
@@ -316,6 +324,7 @@
         },
         "/patients/upload":{
             "post":{
+            "security": [ { "bearerAuth": [] } ],
                 "description":"upload CSV file",
                 "consumes": [
                     "multipart/form-data"
@@ -479,5 +488,13 @@
                 }
             }
         }
-    }
+    },
+    "securityDefinitions": {
+        "bearerAuth": {
+          "type": "apiKey",
+          "name": "Authorization",
+          "scheme": "bearer",
+          "in": "header"
+        }
+      }
 }
