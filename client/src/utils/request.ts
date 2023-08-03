@@ -1,6 +1,6 @@
 // Will be using AXIOS library for making calls to API from react...
 // Documentation for:: https://www.npmjs.com/package/axios
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { getLocalStorage } from "./storage";
 import { toast } from "react-toastify";
 /**
@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
  * @param  {[string]} headers   Request Headers required by the server side to process the API call
  * @return {[JSON]}             Response provided by the server side code
  */
-export const request = (url, method, headers, payload, isTokenRequired) => {
+export const request = (url:string, method:string, headers?:any, payload?:any, isTokenRequired?:boolean):Promise<AxiosResponse> => {
   return new Promise((resolve, reject) => {
     // Check for allowed method types for making a REST API call if not valid then throw an error...
     const allowedMethodTypes = ["get", "post", "put", "delete", "patch"];
@@ -30,12 +30,13 @@ export const request = (url, method, headers, payload, isTokenRequired) => {
         data: payload,
         headers,
       })
-        .then((response) => {
+        .then((response:AxiosResponse) => {
           resolve(response);
         })
         .catch((error) => {
           if (error.response.status == 401) {
-            window.location = "/login";
+            const win: Window = window;
+            win.location = "/login";
           } else {
             toast.error(
               error.response.data.error || error.response.data.message.error || error.response.data.message

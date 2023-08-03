@@ -2,9 +2,18 @@ import React, { useEffect, useState } from "react";
 import { apiService } from "../../services/apiService";
 import { useParams } from "react-router-dom";
 import { Card } from "antd";
+import { Patient } from "../../types/patient";
 
 export default function PatientDetails() {
-  const [patientDetail, setPatientDetail] = useState({});
+  const [patientDetail, setPatientDetail] = useState<Patient>({
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    age: 0,
+    address: '',
+    contact_number: '',
+    email: ''
+  });
   const params = useParams();
 
   useEffect(() => {

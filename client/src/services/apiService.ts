@@ -1,9 +1,12 @@
+import { sortDirection } from "../types/appTypes";
+import { updatePatient,Patient } from "../types/patient";
+import { loginRequestBody, signUpRequestBody } from "../types/user";
 import { request } from "../utils/request";
 import { setLocalStorage } from "../utils/storage";
 
 export const API_URL = "http://localhost:8000/v1";
 
-function login(requestBody) {
+function login(requestBody:loginRequestBody) {
   return request(
     API_URL + "/login",
     "POST",
@@ -14,7 +17,7 @@ function login(requestBody) {
   );
 }
 
-function signup(requestBody) {
+function signup(requestBody:signUpRequestBody) {
   return request(
     API_URL + "/signup",
     "POST",
@@ -30,7 +33,7 @@ function logout() {
   return request(API_URL + "/logout", "GET");
 }
 
-function savePatient(requestBody) {
+function savePatient(requestBody:Patient) {
   return request(
     API_URL + "/patients/add",
     "POST",
@@ -42,7 +45,7 @@ function savePatient(requestBody) {
   );
 }
 
-function updatePatient(requestBody) {
+function updatePatient(requestBody:updatePatient) {
   return request(
     API_URL + "/patients/update",
     "PUT",
@@ -54,13 +57,13 @@ function updatePatient(requestBody) {
   );
 }
 
-function getPatientById(patientId) {
+function getPatientById(patientId:string) {
   return request(API_URL + "/patients/" + patientId, "GET", {}, {}, true);
 }
-function deletePatient(patientId) {
+function deletePatient(patientId:string) {
   return request(API_URL + "/patients/" + patientId, "DELETE", {}, {}, true);
 }
-function getAllPatients(page, limit, sort, direction) {
+function getAllPatients(page?:number, limit?:number, sort?:string, direction?:sortDirection) {
   let url = API_URL + "/patients/all";
 
   if (page && limit) {
@@ -73,7 +76,7 @@ function getAllPatients(page, limit, sort, direction) {
   return request(url, "GET", {}, {}, true);
 }
 
-function searchPatient(searchKey) {
+function searchPatient(searchKey:string) {
   return request(
     API_URL + "/patients/search/" + searchKey,
     "GET",
@@ -83,7 +86,7 @@ function searchPatient(searchKey) {
   );
 }
 
-function filterPatient(minAge, maxAge) {
+function filterPatient(minAge:number, maxAge:number) {
   if (!minAge || !maxAge) {
     getAllPatients();
   }

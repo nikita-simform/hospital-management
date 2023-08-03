@@ -1,18 +1,19 @@
+import React from "react";
 import { Button, Form, Input, Card } from "antd";
 import { apiService } from "../../services/apiService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { signupFormValues } from "../../types/user";
 
 export default function SignUp() {
   let navigate = useNavigate();
-  const onFinish = (values) => {
+  const onFinish = (values:signupFormValues) => {
     if (values.password !== values.confirm_password) {
       return;
     }
     apiService
       .signup({
         firstName: values.firstName,
-        middleName: values.middleName,
         lastName: values.lastName,
         email: values.email,
         password: values.password,
@@ -23,7 +24,7 @@ export default function SignUp() {
       });
   };
 
-  const onFinishFailed = (errorInfo) => {
+  const onFinishFailed = (errorInfo:any) => {
     console.log("errorInfo:",errorInfo)
   };
 
@@ -45,13 +46,6 @@ export default function SignUp() {
           rules={[{ required: true, message: "Please enter your first name" }]}
         >
           <Input placeholder="Enter First Name" />
-        </Form.Item>
-
-        <Form.Item
-          name="middleName"
-          rules={[{ required: true, message: "Please enter your middle name" }]}
-        >
-          <Input placeholder="Enter Middle Name" />
         </Form.Item>
 
         <Form.Item

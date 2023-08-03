@@ -1,6 +1,7 @@
 import { Outlet, Navigate } from "react-router";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import React from "react";
 import { getLocalStorage } from "./storage";
 
 const PrivateRoutes = () => {
@@ -8,7 +9,7 @@ const PrivateRoutes = () => {
   return (
     <>
       <Header isUserLoggedIn={token} />
-      {token?<Outlet />:<Navigate to="/login"/>}
+      {token ? <Outlet /> : <Navigate to="/login" />}
       <Footer />
     </>
   );

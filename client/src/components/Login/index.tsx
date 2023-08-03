@@ -3,24 +3,29 @@ import { apiService } from "../../services/apiService";
 import { useDispatch } from "react-redux";
 import { setToken, setUser } from "./LoginSlice";
 import { useNavigate } from "react-router-dom";
+import React from "react";
+import { loginAPIResponse } from "../../types/user";
 
-function Login() {
+const Login: React.FC = () => {
   const dispatch = useDispatch();
   let navigate = useNavigate();
 
-  const onFinish = (values) => {
+  const onFinish = (values:{
+    username:string,
+    password:string
+  }) => {
     apiService
       .login({
         email: values.username,
         password: values.password,
       })
-      .then((res) => {
+      .then((res:loginAPIResponse) => {
         dispatch(setUser(res.data.data?.user));
         dispatch(setToken(res.data.data?.token));
         navigate("/patient-list");
       });
   };
-  const onFinishFailed = (errorInfo) => {
+  const onFinishFailed = (errorInfo:any) => {
     console.log("errorInfo:", errorInfo)
   };
   return (
@@ -73,7 +78,5 @@ function Login() {
     </Card>
   );
 }
-
-Login.propTypes = {};
 
 export default Login;

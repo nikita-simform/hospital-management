@@ -17,20 +17,20 @@ function App() {
       <Router>
         <Routes>
           <Route element={<Home />} path="/" />
-          <Route element={<Login />} path="/login" exact />
-          <Route element={<SignUp />} path="/sign-up" exact />
+          <Route element={<Login />} path="/login"  />
+          <Route element={<SignUp />} path="/sign-up"  />
           <Route element={<PrivateRoutes />}>
-            <Route element={<PatientList />} path="/patient-list" exact />
-            <Route element={<PatientDetails />} path="/patient/:id" exact />
+            <Route element={<PatientList />} path="/patient-list"  />
+            <Route element={<PatientDetails />} path="/patient/:id"  />
             <Route
               element={<AddEditPatientDetails />}
               path="/patient/add"
-              exact
+              
             />
             <Route
               element={<AddEditPatientDetails />}
               path="/patient/edit/:id"
-              exact
+              
             />
           </Route>
         </Routes>

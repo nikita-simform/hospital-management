@@ -4,18 +4,27 @@ import { apiService } from "../../services/apiService";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { Patient, updatePatient } from "../../types/patient";
 
 export default function AddEditPatientDetails() {
-  const [patientDetail, setPatientDetail] = useState({});
+  const [patientDetail, setPatientDetail] = useState<Patient>({
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    age: 0,
+    address: '',
+    contact_number: '',
+    email: ''
+  });
   const params = useParams();
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
   Object.keys(patientDetail).length !== 0 &&
     form.setFieldsValue({
-      firstname: patientDetail.firstName,
-      middlename: patientDetail.middleName,
-      lastname: patientDetail.lastName,
+      firstName: patientDetail.firstName,
+      middleName: patientDetail.middleName,
+      lastName: patientDetail.lastName,
       age: patientDetail.age,
       address: patientDetail.address,
       contact_number: patientDetail.contact_number,
@@ -30,11 +39,11 @@ export default function AddEditPatientDetails() {
     }
   }, [params.id]);
 
-  const onFinish = (values) => {
-    let requestBody = {
-      firstName: values.firstname,
-      middleName: values.middlename,
-      lastName: values.lastname,
+  const onFinish = (values:Patient) => {
+    let requestBody:updatePatient = {
+      firstName: values.firstName,
+      middleName: values.middleName,
+      lastName: values.lastName,
       age: values.age,
       address: values.address,
       contact_number: values.contact_number,
@@ -53,7 +62,7 @@ export default function AddEditPatientDetails() {
       });
     }
   };
-  const onFinishFailed = (errorInfo) => {
+  const onFinishFailed = (errorInfo:any) => {
     console.log("Failed:", errorInfo);
   };
   const { TextArea } = Input;
@@ -77,7 +86,7 @@ export default function AddEditPatientDetails() {
         form={form}
       >
         <Form.Item
-          name="firstname"
+          name="firstName"
           rules={[
             {
               required: true,
@@ -88,7 +97,7 @@ export default function AddEditPatientDetails() {
           <Input placeholder="Enter First Name" />
         </Form.Item>
         <Form.Item
-          name="middlename"
+          name="middleName"
           rules={[
             {
               required: true,
@@ -99,7 +108,7 @@ export default function AddEditPatientDetails() {
           <Input placeholder="Enter Middle Name" />
         </Form.Item>
         <Form.Item
-          name="lastname"
+          name="lastName"
           rules={[
             {
               required: true,

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Table, Input, Modal, Button, message, Upload, Space } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
@@ -18,6 +18,11 @@ import {
 import { getLocalStorage } from "../../utils/storage";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { rootState } from "../../types/storeTypes";
+import { sortDirection } from "../../types/appTypes";
+import type { TablePaginationConfig, TableProps } from "antd/es/table";
+import type { UploadChangeParam } from 'antd/es/upload';
+import { patientQueryParam, patientWithId } from "../../types/patient";
 
 const { Search } = Input;
 
@@ -25,12 +30,12 @@ function PatientList() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  let patientList = useSelector((state) => state.patient.patientList);
-  const totalPatients = useSelector((state) => state.patient.total);
-  const isDeletePopupOpen = useSelector(
+  let patientList = useSelector<rootState, patientWithId[] | undefined>((state) => state.patient.patientList);
+  const totalPatients = useSelector<rootState, number>((state) => state.patient.total);
+  const isDeletePopupOpen = useSelector<rootState, string | boolean | null>(
     (state) => state.patient.isDeletePopupOpen
   );
-  const httpGetAllPatients = (page, limit, sort, direction) => {
+  const httpGetAllPatients = (page?: number, limit?: number, sort?: string, direction?: sortDirection) => {
     apiService.getAllPatients(page, limit, sort, direction).then((response) => {
       dispatch(setPatientList(response.data.data?.patients));
       dispatch(setTotalPatients(response.data.data?.total));
@@ -40,22 +45,19 @@ function PatientList() {
     httpGetAllPatients(DEFAULT_PAGE, DEFAULT_PAGE_SIZE);
   }, []);
 
-  // const onPageChange = (pageNumber) => {
-  //   httpGetAllPatients(pageNumber, DEFAULT_PAGE_SIZE);
-  // };
-
-  const filterPatientsByAge = (minAge, maxAge) => {
+  const filterPatientsByAge = (minAge: number, maxAge: number) => {
     apiService.filterPatient(minAge, maxAge).then((response) => {
       dispatch(setPatientList(response.data.data?.result));
       dispatch(setTotalPatients(response.data.data?.result?.length || 0));
     });
   };
 
-  const handleOnChange = (pagination, filters, sorter) => {
-    let params = {};
-    if (sorter.hasOwnProperty("column")) {
+  const handleOnChange: TableProps<patientWithId>['onChange'] = (pagination, filters:any, sorter:any) => {
+    let params: patientQueryParam = {};
+
+    if (sorter.field && sorter.order) {
       params.sort = sorter.field;
-      params.dir = direction[sorter.order];
+      params.direction = direction[sorter.order];
     }
 
     if (filters.age) {
@@ -73,41 +75,49 @@ function PatientList() {
       pagination.current,
       pagination.pageSize,
       params.sort,
-      params.dir
+      params.direction
     );
   };
 
-  const searchPatient = (searchKey) => {
+  const searchPatient = (searchKey: string) => {
     apiService.searchPatient(searchKey).then((response) => {
       dispatch(setPatientList(response.data.data?.result));
       dispatch(setTotalPatients(response.data.data?.result?.length || 0));
     });
   };
-  const onSearch = (value) => {
+  const onSearch = (value: string) => {
     searchPatient(value);
   };
 
-  const handleDelete = (patientId) => {
+  const handleDelete = (patientId: string) => {
     dispatch(setIsDeletePopupOpen(patientId));
   };
 
   const deletePatient = () => {
-    apiService.deletePatient(isDeletePopupOpen).then(() => {
-      toast.success("Patient details deleted successfully");
-      let newPatientList = [...patientList];
-      let index = newPatientList.indexOf(
-        newPatientList.find((patient) => patient._id == isDeletePopupOpen)
-      );
-      newPatientList.splice(index, 1);
-      dispatch(setPatientList(newPatientList));
-      dispatch(setIsDeletePopupOpen(null));
-    });
+    if (typeof isDeletePopupOpen === 'string') {
+      apiService.deletePatient(isDeletePopupOpen).then(() => {
+        toast.success("Patient details deleted successfully");
+        if (patientList !== undefined) {
+          const patientToDelete = patientList.find((patient) => patient._id === isDeletePopupOpen);
+
+          if (patientToDelete) {
+            const index = patientList.findIndex((patient) => patient._id === isDeletePopupOpen);
+            if (index !== -1) {
+              const newPatientList = [...patientList];
+              newPatientList.splice(index, 1);
+              dispatch(setPatientList(newPatientList));
+              dispatch(setIsDeletePopupOpen(null));
+            }
+          }
+        }
+      });
+    }
   };
   const handleCancel = () => {
     dispatch(setIsDeletePopupOpen(null));
   };
-  function onChange(info) {
-   
+
+  function onChange(info: UploadChangeParam) {
     if (info.file.status === "done") {
       message.success(`${info.file.name} file uploaded successfully`);
       httpGetAllPatients(DEFAULT_PAGE, DEFAULT_PAGE_SIZE);
@@ -159,7 +169,7 @@ function PatientList() {
 
       <Modal
         title=""
-        open={isDeletePopupOpen}
+        open={isDeletePopupOpen !== null ? true : false}
         onOk={deletePatient}
         onCancel={handleCancel}
       >
@@ -168,7 +178,5 @@ function PatientList() {
     </div>
   );
 }
-
-PatientList.propTypes = {};
 
 export default PatientList;
