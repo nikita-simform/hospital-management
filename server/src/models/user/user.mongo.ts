@@ -32,19 +32,18 @@ const userSchema = new mongoose.Schema(
 
 userSchema
   .virtual("password")
-  .set(function (password) {
-    _password = password;
+  .set(function (this:any,password:string) {
     this.salt = uuidv4();
     this.encry_password = this.securePassword(password);
   })
   .get(function () {});
 
 userSchema.methods = {
-  authenticate: function (plainPassword) {
+  authenticate: function (plainPassword:string) {
     return this.securePassword(plainPassword) === this.encry_password;
   },
 
-  securePassword: function (plainPassword) {
+  securePassword: function (plainPassword:string) {
     if (!plainPassword) return "";
 
     try {
@@ -58,4 +57,5 @@ userSchema.methods = {
   },
 };
 
-module.exports=mongoose.model("User",userSchema);
+const User= mongoose.model("User",userSchema);
+export default User;

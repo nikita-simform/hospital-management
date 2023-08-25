@@ -1,8 +1,7 @@
-const http = require("http");
-const app = require("./app");
-const { mongoConnect } = require("./services/mongo");
+import http from "http";
+import app from "./app";
+import { mongoConnect } from "./services/mongo";
 require('dotenv').config();
-
 
 const PORT = process.env.PORT || 8000;
 

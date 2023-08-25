@@ -1,18 +1,19 @@
-const Patient = require("./patient.mongo");
+import { PatientType } from "../../types/appTypes";
+import Patient from "./patient.mongo";
 
-async function getAllPatients(skip, limit, sort) {
+export async function getAllPatients(skip:number, limit:number, sort:{[key:string]:number}) {
   return await Patient.find({}, { __v: 0 }).skip(skip).limit(limit).sort(sort);
 }
 
-async function getTotalPatient() {
+export async function getTotalPatient() {
   return await Patient.find({}).count();
 }
 
-async function savePatient(patient) {
+export async function savePatient(patient:PatientType) {
   return await Patient.create(patient);
 }
 
-async function isExistingPatient(patientId) {
+export async function isExistingPatient(patientId:string) {
   const existingUser = await Patient.findOne({
     _id: patientId,
   });
@@ -20,7 +21,7 @@ async function isExistingPatient(patientId) {
   return existingUser;
 }
 
-async function updatePatient(patient) {
+export async function updatePatient(patient:PatientType) {
   return await Patient.updateOne(
     {
       _id: patient.id,
@@ -29,13 +30,13 @@ async function updatePatient(patient) {
   );
 }
 
-async function deletePatient(patientId) {
+export async function deletePatient(patientId:string) {
   return await Patient.deleteOne({
     _id: patientId,
   });
 }
 
-async function searchPatient(searchKey) {
+export async function searchPatient(searchKey:string) {
   return await Patient.find(
     {
       $or: [
@@ -53,7 +54,7 @@ async function searchPatient(searchKey) {
   );
 }
 
-async function filterPatientByAge(minAge, maxAge) {
+export async function filterPatientByAge(minAge:number, maxAge:number) {
   return await Patient.find(
     {
       $and: [{ age: { $gte: minAge } }, { age: { $lt: maxAge } }],
@@ -64,18 +65,6 @@ async function filterPatientByAge(minAge, maxAge) {
   );
 }
 
-async function uploadFile(csvData){
+export async function uploadFile(csvData:any){
   return await Patient.insertMany(csvData);
 }
-
-module.exports = {
-  getAllPatients,
-  savePatient,
-  isExistingPatient,
-  updatePatient,
-  deletePatient,
-  getTotalPatient,
-  searchPatient,
-  filterPatientByAge,
-  uploadFile
-};

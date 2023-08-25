@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { v4: uuidv4 } = require('uuid');
 
 const patientSchema = new mongoose.Schema({
   firstName: {
@@ -38,4 +37,5 @@ const patientSchema = new mongoose.Schema({
   id: String
 });
 
-module.exports = mongoose.model("Patient", patientSchema);
+const Patient = mongoose.model("Patient", patientSchema);
+export default Patient;

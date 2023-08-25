@@ -1,6 +1,8 @@
-const User = require('./user.mongo');
+import { UserType } from "../../types/appTypes";
 
-async function isExistingUser(email) {
+import User from'./user.mongo';
+
+export async function isExistingUser(email:string) {
     const existingUser = await User.findOne({
         email: email
     });
@@ -8,15 +10,10 @@ async function isExistingUser(email) {
     return existingUser;
 }
 
-async function doSignup(user) {
+export async function doSignup(user:UserType) {
     const newUser = new User(user);
     const newUserInserted = await User.create(
         newUser
     )
     return newUserInserted;
-}
-
-module.exports = {
-    isExistingUser,
-    doSignup,
 }

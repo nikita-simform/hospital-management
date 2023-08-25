@@ -1,6 +1,6 @@
-const { check } = require('express-validator');
+import { check } from 'express-validator';
 
-const patientValidations = () => {
+export const patientValidations = () => {
     return [
         check("firstName", "First name is required").notEmpty(),
         check("firstName", "First name should be atleast be 3 characters").isLength({
@@ -19,8 +19,4 @@ const patientValidations = () => {
         }),
         check("email", "Email should be valid").isEmail(),
     ]
-}
-
-module.exports = {
-    patientValidations
 }

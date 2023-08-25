@@ -1,5 +1,5 @@
-const express = require("express");
-const {
+import express from "express";
+import {
   httpGetAllPatients,
   httpSavePatient,
   httpUpdatePatient,
@@ -7,14 +7,13 @@ const {
   httpFindPatientById,
   httpSearchPatient,
   httpFilterPatientByAge,
-  temp,
   uploadCSV,
-} = require("./patient.controller");
-const { uploads } = require("../../services/multer");
-const { patientValidations } = require("./patient.validations");
-const { verifyToken } = require("../../utils/accessToken");
+} from "./patient.controller";
+import { uploads } from "../../services/multer";
+import { patientValidations } from "./patient.validations";
+import { verifyToken } from "../../utils/accessToken";
 
-const patientRouter = express.Router();
+const patientRouter = express.Router();                
 
 patientRouter.post('/upload',verifyToken,uploads.single('csvFile'),uploadCSV);
 patientRouter.get("/filter",verifyToken,httpFilterPatientByAge);
@@ -31,4 +30,4 @@ patientRouter.get("/:id", verifyToken, httpFindPatientById);
 patientRouter.get("/search/:key",verifyToken,httpSearchPatient);
 
 
-module.exports = patientRouter;
+export {patientRouter};
