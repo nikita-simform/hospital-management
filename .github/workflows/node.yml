@@ -20,6 +20,7 @@ jobs:
       - run: npm run build --prefix client
       - run: npm install
       - run: |
+         cd /server
          touch .env
          echo "${{secrets.PROD_ENV}}" > .env
      
