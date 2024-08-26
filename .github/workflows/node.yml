@@ -21,8 +21,5 @@ jobs:
       - run: npm install
       - run: |
          touch .env
-         echo "${{secrets.MONGO_URL}}" > .env
-         echo "${{secrets.SECRET}}" > .env
-         echo "${{secrets.TOKEN_EXPIRY_TIME}}" > .env
-         echo "${{secrets.PORT}}" > .env
+         echo "${{secrets.PROD_ENV}}" > .env
      
