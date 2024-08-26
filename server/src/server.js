@@ -3,9 +3,7 @@ const app = require("./app");
 const { mongoConnect } = require("./services/mongo");
 require('dotenv').config();
 
-
 const PORT = process.env.PORT || 8000;
-
 const server = http.createServer(app);
 
 async function startServer() {
