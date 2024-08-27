@@ -1,9 +1,9 @@
 name: Hospital Management CI
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 jobs:
   build:
     strategy:
@@ -20,8 +20,9 @@ jobs:
       - run: npm install --prefix server
       - run: npm run build --prefix client
       - run: |
-         cd server
-         touch .env
-         echo "${{secrets.PROD_ENV}}" > .env 
-      - run: npm install -g pm2
-      - run: pm2 restart HospitalManagement
+          cd server
+          touch .env
+          echo "${{secrets.PROD_ENV}}" > .env
+      - run: npm start --prefix server
+      # - run: npm install -g pm2
+      # - run: pm2 restart HospitalManagement
