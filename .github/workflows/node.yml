@@ -6,24 +6,24 @@ on:
     branches: [main]
 jobs:
   build:
-    strategy:
-      matrix:
-        node-version: [18.x]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v2
+      - name: Login to docker hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build Docker Image
+        run: docker build -t nikitasimform/hospital-management  .
+      - name: Publish Image to docker hub
+        run: docker push nikitasimform/hospital-management:latest
+
+  deploy:
+    needs: build
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js version ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm install --prefix client
-      - run: npm install --prefix server
-      - run: npm run build --prefix client
-      - run: sleep 40
-      - run: |
-          cd server
-          touch .env
-          echo "${{secrets.PROD_ENV}}" > .env
-      # - run: npm start --prefix server
-      - run: npm install -g pm2
-      - run: pm2 restart HospitalManagement
+      - name: Pull image from docker hub
+        run: docker pull nikitasimform/hospital-management:latest
+      - name: Delete old container
+        run: docker rm -f hospital-management-container
+      - name: Run Docker Container
+        run: docker run -d -p 8000:8000 --name hospital-management-container -e MONGO_URL='${{ secrets.MONGO_URL }}' -e TOKEN_EXPIRY_TIME='${{ secrets.TOKEN_EXPIRY_TIME }}'  -e SECRET='${{ secrets.SECRET }}' integrationninjas/nodejs-app
