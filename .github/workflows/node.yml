@@ -26,4 +26,4 @@ jobs:
       - name: Delete old container
         run: docker rm -f hospital-management-container
       - name: Run Docker Container
-        run: docker run -d -p 8000:8000 --name hospital-management-container -e MONGO_URL='${{ secrets.MONGO_URL }}' -e TOKEN_EXPIRY_TIME='${{ secrets.TOKEN_EXPIRY_TIME }}'  -e SECRET='${{ secrets.SECRET }}' integrationninjas/nodejs-app
+        run: docker run -d -p 8000:8000 --name hospital-management-container -e MONGO_URL='${{ secrets.MONGO_URL }}' -e TOKEN_EXPIRY_TIME='${{ secrets.TOKEN_EXPIRY_TIME }}'  -e SECRET='${{ secrets.SECRET }}' nikitasimform/hospital-management
