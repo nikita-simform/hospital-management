@@ -9,7 +9,7 @@ function Home() {
       <Header />
       <div className="container">
         <Image src={hospitalImage} height={700} width={1900} />
-        <p>Welcome to hospital management portal test</p>
+        <p>Welcome to hospital management portal</p>
       </div>
       <Footer />
     </>
