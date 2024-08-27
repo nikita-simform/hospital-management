@@ -50,13 +50,13 @@ async function signIn(req, res) {
     const token = createToken({ _id: existingUser._id });
     res.cookie("token", token, { expire: new Date() + 1 });
 
-    return httpResponse(res, 200, 'Login Successful', {   
-        token,
-        user: {
-          id: existingUser._id,
-          name: existingUser.firstName + " " + existingUser.lastName,
-          email: existingUser.email,
-        } 
+    return httpResponse(res, 200, 'Login Successful', {
+      token,
+      user: {
+        id: existingUser._id,
+        name: existingUser.firstName + " " + existingUser.lastName,
+        email: existingUser.email,
+      }
     });
   }
   catch (error) {
@@ -66,7 +66,7 @@ async function signIn(req, res) {
 
 function logout(req, res) {
   res.clearCookie("token");
-  return httpResponse(res, 200, 'User logged out successfully');
+  return httpResponse(res, 200, 'User logged out successfully test CI/CD');
 }
 
 
