@@ -66,7 +66,7 @@ async function signIn(req, res) {
 
 function logout(req, res) {
   res.clearCookie("token");
-  return httpResponse(res, 200, 'User logged out successfully test CI/CD test 2');
+  return httpResponse(res, 200, 'User logged out successfully');
 }
 
 
