@@ -22,6 +22,4 @@ jobs:
          cd server
          touch .env
          echo "${{secrets.PROD_ENV}}" > .env 
-      - run: |
-         cd server
-         pm2 restart HospitalManagement
+      - run: pm2 restart HospitalManagement
